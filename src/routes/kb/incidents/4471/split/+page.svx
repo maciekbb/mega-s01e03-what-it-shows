@@ -1,0 +1,61 @@
+---
+layout: runbook
+title: '#4471 split: three problems, not one'
+owner: maciekbb
+status: proposed
+reviewed: 2026-10-29
+signature: 'v1.eyJzdWIiOiI0NjUwIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMzMTEwNTIsImV4cCI6MTc5MzM5NzQ1Mn0.nh8OVp_yozOd7Ah9rRJb-g5lLHSVnXS7dIHqBuQ7gyc'
+---
+
+<script>
+  import ProblemSplit from '#lib/kb/ProblemSplit.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+
+  const repo = 'https://github.com/maciekbb/mega-s01e03-what-it-shows/issues';
+  const issues = { parser: `${repo}/1`, hint: `${repo}/2`, 'one-day-move': `${repo}/3` };
+</script>
+
+[#4471](/kb/incidents/4471) says the reports about wrong dates are one bug with one fix queued.
+They are three. Each has its own ticket and its own fix, and fixing one leaves the other two in place.
+
+<ProblemSplit ticket={4471} {issues} />
+
+<Callout kind="warn">
+The fix queued for #4471 is the parser fix. It does not touch <code>hint</code> or
+<code>one-day-move</code>. Those reports will keep coming after it ships.
+</Callout>
+
+## The three problems
+
+**`parser`: the shared parser reads every date month first.** Every tenant on file writes the day
+first. A booking for 7 April comes out as 4 July. This holds for the app, email and the
+`booking-v2` form.
+
+**`hint`: the `booking-v3` form tells people to type month first.** Its date field prints
+`MM/DD/YYYY` under it, then reads what people type the tenant's way, day first. The people follow the
+hint and get the same flip as `parser`, through a different bug: the parser fix does not touch it.
+Only form reports from `booking-v3` tenants land here.
+
+**`one-day-move`: dates move by one day, not by a day/month flip.** Tuesday shows as Monday; an
+invite arrives before the booking; one meeting lands on two days for clients in Lisbon and Toronto;
+only June is off. No locale or form explains this, so it is not a parser problem. It looks like a time
+zone or daylight-saving shift. The desk had already marked these reports in `desk-notes.json` and
+footnoted them under `parser`; here they are a problem of their own.
+
+## How the split was made
+
+- Each report is counted once by its id. The export lists some twice.
+- The problem comes from the tenant, not the report: its locale (asked of the platform) and its
+  booking form, as in `causes.ts`. Intake's tag is a guess from the reporter's browser, and the table
+  shows how often it was wrong.
+- Every report with a date pair in its body was checked: all but the one-day moves are a day/month
+  swap, and every weekday named matches its date.
+
+## Why one ticket hid three
+
+Reports were merged by subject ([decision 0001](/kb/decisions/0001-dedupe-by-subject)). Subjects
+like "Date is wrong" fit all three problems, so the merge could not tell them apart. The subject
+says how it felt; the tenant and the channel say what broke.
+
+<RenderStamp {signature} />
