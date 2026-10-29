@@ -22,9 +22,16 @@ They are three. Each has its own ticket and its own fix, and fixing one leaves t
 <ProblemSplit ticket={4471} {issues} />
 
 <Callout kind="warn">
-The fix queued for #4471 is the parser fix. It does not touch <code>hint</code> or
-<code>one-day-move</code>. Those reports will keep coming after it ships.
+Engineering closed #4471 on 5 October. <code>parser</code> is fixed (<code>fix(dates): parse dd/mm for eu
+locales</code>). <code>hint</code> is won't fix: the <code>booking-v3</code> form is retired.
+<code>one-day-move</code> is still open: neither change touches it.
 </Callout>
+
+| problem | status | ticket |
+|---|---|---|
+| `parser` | fixed, 5 Oct | closed as completed |
+| `hint` | won't fix: `booking-v3` retired | closed as not planned |
+| `one-day-move` | open, no fix yet | open |
 
 ## The three problems
 
