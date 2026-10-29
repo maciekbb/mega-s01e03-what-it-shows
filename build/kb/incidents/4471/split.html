@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../../../_app/immutable/entry/start.CSiRRa7L.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/WgfOfNfE.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/SuXsWc2F.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/CZomEjWq.js" rel="modulepreload">
+		<link href="../../../_app/immutable/entry/app.D0ORUTU-.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/DZni_WYU.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/BMv-2JeR.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/DQhTBKxc.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/DL3LuOT-.js" rel="modulepreload">
+		<link href="../../../_app/immutable/nodes/0.Dqsao82p.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/BRmqMdvF.js" rel="modulepreload">
+		<link href="../../../_app/immutable/nodes/5.BfdqBGqq.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/DzJk9jP2.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/CCdwa9zY.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/0VBt_sN3.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/iXLSwIXB.js" rel="modulepreload">
+		<!--e2jw2j--><!----><title>#4471 split: three problems, not one · support kb</title>
+		<link href="../../../_app/immutable/assets/runbook.BhhgOc_n.css" rel="stylesheet">
+		<link href="../../../_app/immutable/assets/Callout.yLErXQDM.css" rel="stylesheet">
+		<link href="../../../_app/immutable/assets/5.D5Zi5SIo.css" rel="stylesheet">
+  </head>
+  <body>
+    <div style="display: contents"><!--[--><!--[0--><!--[--><!--[--><div class="kb svelte-e2jw2j"><header><a class="crumb svelte-e2jw2j" href="/kb">support desk · kb</a> <h1 class="svelte-e2jw2j">#4471 split: three problems, not one</h1> <p class="meta svelte-e2jw2j"><span>owner <b>maciekbb</b></span> <span class="status proposed svelte-e2jw2j">proposed</span> <span class="svelte-e2jw2j">reviewed 2026-10-29 · 0 days ago</span></p></header> <!--[-1--><!--]--> <main><p><a href="/kb/incidents/4471">#4471</a> says the reports about wrong dates are one bug with one fix queued.
+They are three. Each has its own ticket and its own fix, and fixing one leaves the other two in place.</p> <p class="sum svelte-h3x27m"><strong>412</strong> reports merged into #4471 · <strong>3</strong> problems · every report placed once</p> <table><thead><tr><th>problem</th><th>reports</th><th>ticket</th><th>tagged by intake as</th><th>channels</th><th>tenants</th><th>seen</th></tr></thead><tbody><!--[--><tr><td><code>parser</code></td><td><strong>374</strong></td><td><!--[0--><a href="https://github.com/maciekbb/mega-s01e03-what-it-shows/issues/1">#1</a><!--]--></td><td class="small svelte-h3x27m">parser ×351 · hint ×23</td><td class="small svelte-h3x27m">app ×202 · email ×147 · form ×25</td><td>11</td><td class="small svelte-h3x27m">2026-04-01 → 2026-10-04</td></tr><tr><td><code>hint</code></td><td><strong>33</strong></td><td><!--[0--><a href="https://github.com/maciekbb/mega-s01e03-what-it-shows/issues/2">#2</a><!--]--></td><td class="small svelte-h3x27m">hint ×18 · parser ×15</td><td class="small svelte-h3x27m">form ×33</td><td>3</td><td class="small svelte-h3x27m">2026-04-17 → 2026-09-22</td></tr><tr><td><code>one-day-move</code></td><td><strong>5</strong></td><td><!--[0--><a href="https://github.com/maciekbb/mega-s01e03-what-it-shows/issues/3">#3</a><!--]--></td><td class="small svelte-h3x27m">parser ×5</td><td class="small svelte-h3x27m">email ×3 · app ×2</td><td>5</td><td class="small svelte-h3x27m">2026-04-02 → 2026-10-04</td></tr><!--]--></tbody></table> <!--[0--><p class="note svelte-h3x27m">The export lists 15 reports twice (overlapping pages). Each is counted once.</p><!--]--><!----> <aside class="warn svelte-17bri61"><!---->The fix queued for #4471 is the parser fix. It does not touch <code>hint</code> or <code>one-day-move</code>. Those reports will keep coming after it ships.<!----></aside><!----> <h2>The three problems</h2> <p><strong><code>parser</code>: the shared parser reads every date month first.</strong> Every tenant on file writes the day
+first. A booking for 7 April comes out as 4 July. This holds for the app, email and the <code>booking-v2</code> form.</p> <p><strong><code>hint</code>: the <code>booking-v3</code> form tells people to type month first.</strong> Its date field prints <code>MM/DD/YYYY</code> under it, then reads what people type the tenant’s way, day first. The people follow the
+hint and get the same flip as <code>parser</code>, through a different bug: the parser fix does not touch it.
+Only form reports from <code>booking-v3</code> tenants land here.</p> <p><strong><code>one-day-move</code>: dates move by one day, not by a day/month flip.</strong> Tuesday shows as Monday; an
+invite arrives before the booking; one meeting lands on two days for clients in Lisbon and Toronto;
+only June is off. No locale or form explains this, so it is not a parser problem. It looks like a time
+zone or daylight-saving shift. The desk had already marked these reports in <code>desk-notes.json</code> and
+footnoted them under <code>parser</code>; here they are a problem of their own.</p> <h2>How the split was made</h2> <ul><li>Each report is counted once by its id. The export lists some twice.</li> <li>The problem comes from the tenant, not the report: its locale (asked of the platform) and its
+booking form, as in <code>causes.ts</code>. Intake’s tag is a guess from the reporter’s browser, and the table
+shows how often it was wrong.</li> <li>Every report with a date pair in its body was checked: all but the one-day moves are a day/month
+swap, and every weekday named matches its date.</li></ul> <h2>Why one ticket hid three</h2> <p>Reports were merged by subject (<a href="/kb/decisions/0001-dedupe-by-subject">decision 0001</a>). Subjects
+like “Date is wrong” fit all three problems, so the merge could not tell them apart. The subject
+says how it felt; the tenant and the channel say what broke.</p> <!--[0--><p class="stamp svelte-1280m42">desk ref <b class="svelte-1280m42">DR-3W52-4HNT</b></p><!--]--><!----><!----></main> <footer class="svelte-e2jw2j">Pages are written by people. Tables and charts are built from data at render time.</footer></div><!--]--><!----><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1v3ds7t = {
+						base: new URL("../../..", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../../../_app/immutable/entry/start.CSiRRa7L.js"),
+						import("../../../_app/immutable/entry/app.D0ORUTU-.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 5],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>
